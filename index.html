@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <!-- Bootstrap -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+  </head>
+  <body>
+  	<div class="" style="margin-top: 30px;">
+    	<hr />
+    		<input type="text" name="addressInput" id="addressInput" value="" placeholder="Please input an address" />
+    		<input type="button" value="Go!" id="goButton"/>
+    	<hr />
+    	<div id="results"></div>
+    	
+    </div>
+    <script type="text/javascript">
+	    $(document).ready(function() {
+	    	$('#addressInput').focus();
+	    	$('#goButton').click(() => {
+	    		$('#results').html('Performing request, please wait');
+	    		$('#goButton').prop('disabled', true);
+	    		let address = $('#addressInput').val();
+	    		
+	    		// perform ajax get request
+	    		$.get( "index.php?address="+address, (data) => {
+	    			if (data.status =='OK')
+						$( "#results" ).html(JSON.stringify(data.results));
+	    			else {
+	    				$( "#results" ).html(`${data.status}<br />${data.description}`);
+	    			}
+	   			}, 'json')
+	   			.fail(function() {
+	   				$('#results').html('Request failed.');
+			  	})
+			  	.always(function() {
+			  		$('#goButton').prop('disabled', false);
+			  	});
+			  	;
+	    	})
+	    });
+    </script>
+  </body>
+</html>
